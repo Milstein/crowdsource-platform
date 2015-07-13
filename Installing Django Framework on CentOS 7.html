@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://developersleague.net/installing-django-framework-on-centos-7/ -->
+<html class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en-US" prefix="og: http://ogp.me/ns#"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://developersleague.net/xmlrpc.php">
+
+<title>Installing Django Framework on CentOS 7</title>
+
+<!-- This site is optimized with the Yoast WordPress SEO Premium plugin v2.0.1 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="Django is a very powerful framework for developing python based applications. In this guide we will be focusing on Installing Django Framework On CentOS 7">
+<link rel="canonical" href="./Installing Django Framework on CentOS 7_files/Installing Django Framework on CentOS 7.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Installing Django Framework on CentOS 7">
+<meta property="og:description" content="Django is a very powerful framework for developing python based applications. In this guide we will be focusing on Installing Django Framework On CentOS 7">
+<meta property="og:url" content="http://developersleague.net/installing-django-framework-on-centos-7/">
+<meta property="og:site_name" content="Developers League">
+<meta property="article:tag" content="Installing Django,Linux,python">
+<meta property="article:section" content="Linux">
+<meta property="article:published_time" content="2015-03-14T22:01:39+00:00">
+<meta property="article:modified_time" content="2015-03-14T22:13:28+00:00">
+<meta property="og:updated_time" content="2015-03-14T22:13:28+00:00">
+<meta property="og:image" content="http://developersleague.net/wp-content/uploads/2015/03/django.jpg">
+<!-- / Yoast WordPress SEO Premium plugin. -->
+
+<link rel="alternate" type="application/rss+xml" title="Developers League » Feed" href="http://developersleague.net/feed/">
+<link rel="alternate" type="application/rss+xml" title="Developers League » Comments Feed" href="http://developersleague.net/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Developers League » Installing Django Framework on CentOS 7 Comments Feed" href="http://developersleague.net/installing-django-framework-on-centos-7/feed/">
+		<script id="twitter-wjs" src="./Installing Django Framework on CentOS 7_files/widgets.js"></script><script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/developersleague.net\/wp-includes\/js\/wp-emoji-release.min.js"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&&c.getContext("2d");return d&&d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length>3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><style type="text/css"></style><script src="./Installing Django Framework on CentOS 7_files/wp-emoji-release.min.js" type="text/javascript"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="sparkling-bootstrap-css" href="./Installing Django Framework on CentOS 7_files/bootstrap.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="sparkling-icons-css" href="./Installing Django Framework on CentOS 7_files/font-awesome.min.css" type="text/css" media="all">
+<link rel="stylesheet" id="sparkling-fonts-css" href="./Installing Django Framework on CentOS 7_files/css" type="text/css" media="all">
+<link rel="stylesheet" id="sparkling-style-css" href="./Installing Django Framework on CentOS 7_files/style.css" type="text/css" media="all">
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/jquery.js"></script>
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/modernizr.min.js"></script>
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/bootstrap.min.js"></script>
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/functions.min.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://developersleague.net/xmlrpc.php?rsd">
+<link rel="shortlink" href="http://developersleague.net/?p=105">
+<style type="text/css">.entry-content {font-family: Open Sans; font-size:14px; font-weight: normal; color:#6B6B6B;}</style><script type="text/javascript">
+(function(url){
+if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+var wfscr = document.createElement('script');
+wfscr.type = 'text/javascript';
+wfscr.async = true;
+wfscr.src = url + '&r=' + Math.random();
+(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+})('//developersleague.net/wp-admin/admin-ajax.php?action=wordfence_logHuman&hid=DD7105E3DCF6F8E74B417E5276E44AA7');
+</script><script type="text/javascript" async="" src="./Installing Django Framework on CentOS 7_files/admin-ajax.php"></script>
+<style type="text/css">.fancybox-margin{margin-right:0px;}</style></head>
+
+<body class="single single-post postid-105 single-format-standard" data-twttr-rendered="true" data-gclp-initialized="true" data-gistbox-initialized="true">
+<div id="page" class="hfeed site">
+
+	<header id="masthead" class="site-header" role="banner">
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container">
+				<div class="row">
+					<div class="site-navigation-inner col-sm-12">
+				    <div class="navbar-header">
+	            <button type="button" class="btn navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+	            </button>
+
+							
+							
+								<div id="logo">
+									<span class="site-name"><a class="navbar-brand" href="http://developersleague.net/" title="Developers League" rel="home">Developers League</a></span>
+								</div><!-- end of #logo -->
+
+							
+				    </div>
+							<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-home" class="nav navbar-nav"><li id="menu-item-9" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-9"><a title="Home" href="http://developersleague.net/">Home</a></li>
+<li id="menu-item-10" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-10"><a title="Challenges" href="http://developersleague.net/category/challenges/">Challenges</a></li>
+<li id="menu-item-11" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11"><a title="CSS3" href="http://developersleague.net/category/css3/">CSS3</a></li>
+<li id="menu-item-12" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12"><a title="HTML5" href="http://developersleague.net/category/html5/">HTML5</a></li>
+<li id="menu-item-15" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-15"><a title="JavaScript" href="http://developersleague.net/category/javascript/">JavaScript</a></li>
+<li id="menu-item-13" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-13 dropdown"><a title="LinkBuilkding" href="http://developersleague.net/installing-django-framework-on-centos-7/#" data-toggle="dropdown" class="dropdown-toggle">LinkBuilkding <span class="caret"></span></a>
+<ul role="menu" class=" dropdown-menu">
+	<li id="menu-item-14" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-14"><a title="SEO" href="http://developersleague.net/category/seo/">SEO</a></li>
+</ul>
+</li>
+<li id="menu-item-16" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-16"><a title="Linux" href="http://developersleague.net/category/linux/">Linux</a></li>
+<li id="menu-item-17" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-17"><a title="Wordpress" href="http://developersleague.net/category/wordpress/">WordPress</a></li>
+</ul></div>					</div>
+		    </div>
+		  </div>
+		</nav><!-- .site-navigation -->
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">
+
+		<div class="top-section">
+								</div>
+
+		<div class="container main-content-area">
+			<div class="row">
+				<div class="main-content-inner col-sm-12 col-md-8 pull-left">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+<article id="post-105" class="post-105 post type-post status-publish format-standard has-post-thumbnail hentry category-linux category-web-development tag-installing-django tag-linux tag-python">
+	<img width="605" height="410" src="./Installing Django Framework on CentOS 7_files/django-605x410.jpg" class="single-featured wp-post-image" alt="Installing Django Framework on CentOS 7">	<div class="post-inner-content">
+		<header class="entry-header page-header">
+
+			<h1 class="entry-title ">Installing Django Framework on CentOS 7</h1>
+
+			<div class="entry-meta">
+				<span class="posted-on"><i class="fa fa-calendar"></i> <a href="./Installing Django Framework on CentOS 7_files/Installing Django Framework on CentOS 7.html" rel="bookmark"><time class="entry-date published" datetime="2015-03-14T22:01:39+00:00">March 14, 2015</time><time class="updated" datetime="2015-03-14T22:13:28+00:00">March 14, 2015</time></a></span><span class="byline"> <i class="fa fa-user"></i> <span class="author vcard"><a class="url fn n" href="http://developersleague.net/author/devadmin/">devadmin</a></span></span>
+								<span class="cat-links"><i class="fa fa-folder-open-o"></i>
+					 <a href="http://developersleague.net/category/linux/" rel="category tag">Linux</a>, <a href="http://developersleague.net/category/web-development/" rel="category tag">Web Development</a>				</span>
+								
+			</div><!-- .entry-meta -->
+		</header><!-- .entry-header -->
+
+		<div class="entry-content">
+			<p>Hello Guys , today I will be focusing on&nbsp;<strong><em>Installing Django Framework on CentOS 7</em></strong>. &nbsp;First of all let me give you a brief introduction of Django. Django is a very powerful web framework for developing web applications based on Python. Using frameworks such as Django allows you to run your sites and applications quicker without worrying about the basic structure of code.</p>
+<p>In this guide I will be demonstrating few methods of <em>Installing Django Framework on CentOS 7&nbsp;</em>server.</p>
+<h4>Installing the EPEL Repository</h4>
+<p>The methods we will be discussing now are based on EPEL repos for CentOS . EPEL repository contains extra packages which are not maintained as the core distribution packages.</p>
+<p>It is easy to configure access to EPEL repository. You can configure&nbsp;<em>yum&nbsp;</em>so that it can access EPEL repository. by typing</p>
+<p><code><br>
+yum install epel-release<br>
+</code></p>
+<p>After execution of above command &nbsp;you will have access to all the applications which are maintained by EPEL repository.</p>
+<p>&nbsp;</p>
+<h4>Installing Django</h4>
+<p>There are many methods of installing django , every method has its own advantage depending on your requirements. We will be discussing two methods of&nbsp;<em><strong>Installing Django on CentOS 7</strong></em>.</p>
+<h4>Global Install from Packages</h4>
+<p>Django Packages can be found in the EPEL repository we just installing and can also be installed using&nbsp;<em>yum&nbsp;</em>package manager. This is the most simple method of installing django but this might not be so flexible as the installed version of django might lack &nbsp;behind.</p>
+<p>So for&nbsp;<em>Installing Django&nbsp;</em>through this method you simple need to execute this command.<br>
+<code><br>
+yum install python-django<br>
+</code></p>
+<p>This will install Django on your server and to test the installing and checking the version simply type.</p>
+<p><code><br>
+django-admin --version<br>
+</code><br>
+<code><br>
+1.6.10<br>
+</code></p>
+<p>Output of the above command means that Django is successfully installed on your server but the installed version might not be latest and stable.</p>
+<p>&nbsp;</p>
+<h4>Global Install Through PIP</h4>
+<p><em>PIP&nbsp;</em>is also a package manager but for&nbsp;<em>python.</em> Once&nbsp;<em>pip&nbsp;</em>is installed on your server you can easily install most latest and stable version on any user on server.&nbsp;<em>PIP</em> is the best option for globally installing Django on your server.</p>
+<p>You can install&nbsp;<em>pip&nbsp;</em>through the EPEL repository by executing.<br>
+<code><br>
+sudo yum install python-pip<br>
+</code><br>
+Once <em>pip</em> is installed you can globally install Django by executing.<br>
+<code><br>
+sudo pip install django<br>
+</code></p>
+<p>You can verify the installation version again by executing the previous command.<br>
+<code><br>
+django-admin --version<br>
+</code><br>
+<code><br>
+1.7.5<br>
+</code></p>
+<p>Hope you liked this tutorial , I will be also posting a tutorial on creating your first Django application. Feel free to comment below.</p>
+					</div><!-- .entry-content -->
+
+		<footer class="entry-meta">
+
+	    		      <!-- tags -->
+	      <div class="tagcloud" style="display: block;">
+
+	          <a href="http://developersleague.net/tag/installing-django/">Installing Django</a> <a href="http://developersleague.net/tag/linux/">Linux</a> <a href="http://developersleague.net/tag/python/">python</a> 
+	      </div>
+	      <!-- end tags -->
+	      
+		</footer><!-- .entry-meta -->
+	</div>
+
+	
+</article><!-- #post-## -->
+
+			
+<div id="comments" class="comments-area">
+
+	
+	
+	
+							<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://developersleague.net/installing-django-framework-on-centos-7/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://developersleague.net/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
+																			<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required="true" required="required"></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" aria-describedby="email-notes" aria-required="true" required="required"></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30"></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea onfocus="if(!this._s==true){var _i=document.createElement(&#39;input&#39;);_i.setAttribute(&#39;type&#39;,&#39;hidden&#39;);_i.setAttribute(&#39;name&#39;,&#39;ssc_key_0e00f274152bccb3&#39;);_i.setAttribute(&#39;value&#39;,&#39;ab1b1ac7f2c6a9e0&#39;);var _p=this.parentNode;_p.insertBefore(_i,this);this._s=true;}" id="comment" name="comment" cols="45" rows="8" aria-describedby="form-allowed-tags" aria-required="true" required="required"></textarea></p>						<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
+						<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit btn btn-default" value="Post Comment" style="display: inline-block;"> <input type="hidden" name="comment_post_ID" value="105" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><noscript>&lt;p class="ssc_notice"&gt;Notice: It seems you have Javascript disabled in your Browser. In order to submit a comment to this post, please copy this code and paste it along with your comment: &lt;strong&gt;0e00f274152bccb3ab1b1ac7f2c6a9e0&lt;/strong&gt;&lt;/p&gt;</noscript>					</form>
+							</div><!-- #respond -->
+			
+</div><!-- #comments -->
+				<nav class="navigation post-navigation" role="navigation">
+		<h1 class="screen-reader-text">Post navigation</h1>
+		<div class="nav-links">
+			<div class="nav-previous"><a href="http://developersleague.net/custom-cursors-css3/" rel="prev"><i class="fa fa-chevron-left"></i> How to Create Custom Cursors CSS3</a></div><div class="nav-next"><a href="http://developersleague.net/yoast-optimize-your-wordpress-site-free-download/" rel="next">Yoast Optimize your WordPress Site Free Download <i class="fa fa-chevron-right"></i></a></div>		</div><!-- .nav-links -->
+	</nav><!-- .navigation -->
+	
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+</div>
+	<div id="secondary" class="widget-area col-sm-12 col-md-4" role="complementary">
+		<div class="well">
+						<aside id="search-2" class="widget widget_search"><form method="get" class="form-search" action="http://developersleague.net/">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="input-group">
+        <input type="text" class="form-control search-query" value="" name="s" id="s" placeholder="Search...">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-default" name="submit" id="searchsubmit" value="Go" style=""><span class="glyphicon glyphicon-search"></span></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</form></aside><aside id="sparkling-social-2" class="widget sparkling-social"><h3 class="widget-title">Follow us</h3>
+    <!-- social icons -->
+    <div class="social-icons sticky-sidebar-social">
+
+
+    <div class="social-icons"><a href="https://www.facebook.com/pages/Developers-League/393715830813946?skip_nax_wizard=true&ref_type=bookmark" title="Follow us on Facebook" class="facebook" target="_blank"><i class="social_icon fa fa-facebook"></i></a><a href="https://twitter.com/DevelopersLeagu" title="Follow us on Twitter" class="twitter" target="_blank"><i class="social_icon fa fa-twitter"></i></a><a href="https://www.youtube.com/channel/UC9MQ9WR2UzNTqeH_q61TB0A/videos" title="Follow us on Youtube" class="youtube" target="_blank"><i class="social_icon fa fa-youtube"></i></a></div>
+
+    </div><!-- end social icons -->
+
+
+		</aside><aside id="text-3" class="widget widget_text">			<div class="textwidget"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- side_ad_unit1 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6039731605296127" data-ad-slot="6802307898" data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title">Recent Posts</h3>		<ul>
+					<li>
+				<a href="http://developersleague.net/top-5-content-marketing-tools-to-double-your-search-traffic-best-content-marketing-tools/">Top 5 Content Marketing Tools To Double your Search Traffic Best Content Marketing Tools</a>
+						</li>
+					<li>
+				<a href="http://developersleague.net/building-backlinks-to-improve-website-ranking-10-easy-ways/">Building Backlinks to Improve Website Ranking – 10 Easy Ways</a>
+						</li>
+					<li>
+				<a href="http://developersleague.net/boosting-blog-ranking-using-advanced-seo-strategies/">Boosting Blog Ranking using Advanced SEO Strategies</a>
+						</li>
+					<li>
+				<a href="http://developersleague.net/yoast-optimize-your-wordpress-site-free-download/">Yoast Optimize your WordPress Site Free Download</a>
+						</li>
+					<li>
+				<a href="./Installing Django Framework on CentOS 7_files/Installing Django Framework on CentOS 7.html">Installing Django Framework on CentOS 7</a>
+						</li>
+				</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h3 class="widget-title">Categories</h3><label class="screen-reader-text" for="cat">Categories</label><select name="cat" id="cat" class="postform form-control" style="display: inline-block;">
+	<option value="-1">Select Category</option>
+	<option class="level-0" value="5">CSS3&nbsp;&nbsp;(3)</option>
+	<option class="level-0" value="4">HTML5&nbsp;&nbsp;(1)</option>
+	<option class="level-0" value="11">LinkBuilkding&nbsp;&nbsp;(4)</option>
+	<option class="level-0" value="8">Linux&nbsp;&nbsp;(1)</option>
+	<option class="level-0" value="10">SEO&nbsp;&nbsp;(4)</option>
+	<option class="level-0" value="12">Web Development&nbsp;&nbsp;(4)</option>
+	<option class="level-0" value="6">Wordpress&nbsp;&nbsp;(2)</option>
+</select>
+
+<script type="text/javascript">
+/* <![CDATA[ */
+(function() {
+	var dropdown = document.getElementById( "cat" );
+	function onCatChange() {
+		if ( dropdown.options[ dropdown.selectedIndex ].value > 0 ) {
+			location.href = "http://developersleague.net/?cat=" + dropdown.options[ dropdown.selectedIndex ].value;
+		}
+	}
+	dropdown.onchange = onCatChange;
+})();
+/* ]]> */
+</script>
+
+</aside><aside id="tag_cloud-2" class="widget widget_tag_cloud"><h3 class="widget-title">Tags</h3><div class="tagcloud" style="display: block;"><a href="http://developersleague.net/tag/advanced-seo-strategies/" class="tag-link-33" title="2 topics" style="font-size: 16.4pt;">Advanced SEO strategies</a>
+<a href="http://developersleague.net/tag/boosting-blog-ranking/" class="tag-link-32" title="1 topic" style="font-size: 8pt;">Boosting Blog Ranking</a>
+<a href="http://developersleague.net/tag/boosting-blog-ranking-using-advanced-seo-strategies/" class="tag-link-34" title="1 topic" style="font-size: 8pt;">Boosting Blog Ranking using Advanced SEO Strategies</a>
+<a href="http://developersleague.net/tag/building-backlinks/" class="tag-link-35" title="1 topic" style="font-size: 8pt;">Building Backlinks</a>
+<a href="http://developersleague.net/tag/content-marketing-tools/" class="tag-link-37" title="1 topic" style="font-size: 8pt;">Content Marketing Tools</a>
+<a href="http://developersleague.net/tag/cool-css3-tricks/" class="tag-link-15" title="2 topics" style="font-size: 16.4pt;">Cool Css3 Tricks</a>
+<a href="http://developersleague.net/tag/cool-wordpress-themes-2015/" class="tag-link-24" title="1 topic" style="font-size: 8pt;">cool wordpress themes 2015</a>
+<a href="http://developersleague.net/tag/css3/" class="tag-link-13" title="1 topic" style="font-size: 8pt;">CSS3</a>
+<a href="http://developersleague.net/tag/css3-effects/" class="tag-link-21" title="1 topic" style="font-size: 8pt;">CSS3 Effects</a>
+<a href="http://developersleague.net/tag/css3-tutorials/" class="tag-link-22" title="3 topics" style="font-size: 22pt;">CSS3 Tutorials</a>
+<a href="http://developersleague.net/tag/custom-cursors-in-css3/" class="tag-link-25" title="1 topic" style="font-size: 8pt;">Custom Cursors in CSS3</a>
+<a href="http://developersleague.net/tag/double-your-search-traffic-best-content-marketing-tools/" class="tag-link-38" title="1 topic" style="font-size: 8pt;">Double your Search Traffic . Best Content Marketing Tools</a>
+<a href="http://developersleague.net/tag/improve-website-ranking/" class="tag-link-36" title="1 topic" style="font-size: 8pt;">Improve Website Ranking</a>
+<a href="http://developersleague.net/tag/installing-django/" class="tag-link-27" title="1 topic" style="font-size: 8pt;">Installing Django</a>
+<a href="http://developersleague.net/tag/linkbuilding/" class="tag-link-31" title="2 topics" style="font-size: 16.4pt;">Linkbuilding</a>
+<a href="http://developersleague.net/tag/linux/" class="tag-link-26" title="1 topic" style="font-size: 8pt;">Linux</a>
+<a href="http://developersleague.net/tag/python/" class="tag-link-28" title="1 topic" style="font-size: 8pt;">python</a>
+<a href="http://developersleague.net/tag/seo/" class="tag-link-30" title="2 topics" style="font-size: 16.4pt;">SEO</a>
+<a href="http://developersleague.net/tag/slideup-boxes/" class="tag-link-14" title="1 topic" style="font-size: 8pt;">Slideup Boxes</a>
+<a href="http://developersleague.net/tag/sticky-notes/" class="tag-link-20" title="1 topic" style="font-size: 8pt;">Sticky Notes</a>
+<a href="http://developersleague.net/tag/wordpress/" class="tag-link-17" title="2 topics" style="font-size: 16.4pt;">Wordpress</a>
+<a href="http://developersleague.net/tag/wordpress-themes/" class="tag-link-23" title="1 topic" style="font-size: 8pt;">wordpress themes</a>
+<a href="http://developersleague.net/tag/yoast-optimize-wordpress-site/" class="tag-link-29" title="1 topic" style="font-size: 8pt;">Yoast Optimize Wordpress Site</a></div>
+</aside><aside id="text-2" class="widget widget_text">			<div class="textwidget" data-twttr-id="twttr-sandbox-0"><iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-timeline twitter-timeline-rendered" allowfullscreen="" style="border: none; max-width: 100%; min-width: 180px; margin: 0px; padding: 0px; display: inline-block; position: static; visibility: visible; width: 298px;" title="Twitter Timeline" height="600"></iframe>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>
+		</aside>		</div>
+	</div><!-- #secondary -->
+			</div><!-- close .*-inner (main-content or sidebar, depending if sidebar is used) -->
+		</div><!-- close .row -->
+	</div><!-- close .container -->
+</div><!-- close .site-content -->
+
+	<div id="footer-area">
+		<div class="container footer-inner">
+			<div class="row">
+				
+				</div>
+		</div>
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+			<div class="site-info container">
+				<div class="row">
+					<div class="social-icons"><a href="https://www.facebook.com/pages/Developers-League/393715830813946?skip_nax_wizard=true&ref_type=bookmark" title="Follow us on Facebook" class="facebook" target="_blank"><i class="social_icon fa fa-facebook"></i></a><a href="https://twitter.com/DevelopersLeagu" title="Follow us on Twitter" class="twitter" target="_blank"><i class="social_icon fa fa-twitter"></i></a><a href="https://www.youtube.com/channel/UC9MQ9WR2UzNTqeH_q61TB0A/videos" title="Follow us on Youtube" class="youtube" target="_blank"><i class="social_icon fa fa-youtube"></i></a></div>					<nav role="navigation" class="col-md-6">
+											</nav>
+					<div class="copyright col-md-6">
+						<a href="http://developersleague.net/" title="Developers League">Developers League</a>  All rights reserved.						Theme by <a href="http://colorlib.com/" target="_blank">Colorlib</a> Powered by <a href="http://wordpress.org/" target="_blank">WordPress</a>					</div>
+				</div>
+			</div><!-- .site-info -->
+			<div class="scroll-to-top" style="display: block;"><i class="fa fa-angle-up"></i></div><!-- .scroll-to-top -->
+		</footer><!-- #colophon -->
+	</div>
+<!-- #page -->
+
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/skip-link-focus-fix.js"></script>
+<script type="text/javascript" src="./Installing Django Framework on CentOS 7_files/comment-reply.min.js"></script>
+
+
+
+<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+
+Content Delivery Network via N/A
+
+ Served from: developersleague.net @ 2015-06-03 01:34:42 by W3 Total Cache --><iframe id="rufous-sandbox" scrolling="no" frameborder="0" allowtransparency="true" style="display: none;"></iframe><iframe frameborder="0" scrolling="no" style="border: 0px; display: none; background-color: transparent;"></iframe><div id="GOOGLE_INPUT_CHEXT_FLAG" input="null" input_stat="{&quot;tlang&quot;:true,&quot;tsbc&quot;:true,&quot;pun&quot;:true,&quot;mk&quot;:false,&quot;ss&quot;:true}" style="display: none;"></div><form id="gclp-frame-form" target="gclp-frame" method="post" style="display: none;"></form></body></html>
