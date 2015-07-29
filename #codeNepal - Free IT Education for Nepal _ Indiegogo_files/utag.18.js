@@ -1,0 +1,6 @@
+//tealium universal tag - utag.18 ut4.0.201505182026, Copyright 2015 Tealium.com Inc. All Rights Reserved.
+window._kiq=window._kiq||[];try{(function(id,loader,u){u=utag.o[loader].sender[id]={};u.ev={'view':1};u.data={};u.data.jspath="s3.amazonaws.com/ki.js/55161/c7I.js";u.map={"user_id":"set","user_email":"identify","campaign_id":"set","campaign_category":"set","contribution_value":"set","campaign_goal_amount":"set","campaign_raised_amount":"set","campaign_percent_of_goal":"set","campaign_days_left":"set","site_currency":"set","romref":"set","romref_source":"set"};u.extend=[];u.send=function(a,b){if(u.ev[a]||typeof u.ev.all!="undefined"){var c,d,e,f;c=[];for(d in utag.loader.GV(u.map)){if(typeof b[d]!="undefined"&&b[d]!=""){e=u.map[d].split(",");for(f=0;f<e.length;f++){u.data[e[f]]=b[d];for(var m in u.data){if(m=="set"){window.set_q_obj=window.set_q_obj||{};set_q_obj[d]=b[d];}}}}}
+if(u.data.identify){window._kiq.push(["identify",u.data.identify]);}
+if(window.set_q_obj){window._kiq.push(['set',window.set_q_obj]);}
+u.base_url="//"+u.data.jspath;u.s=document.getElementsByTagName("script")[0];u.scr=document.createElement("script");u.scr.type="text/javascript";u.scr.src=u.base_url;u.s.parentNode.insertBefore(u.scr,u.s);}}
+utag.o[loader].loader.LOAD(id);})('18','indiegogo.main');}catch(e){}
