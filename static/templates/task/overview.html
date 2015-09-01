@@ -1,9 +1,9 @@
 <md-data-table class="table">
     <div class="md-data-table-card-header" layout="row" layout-align="start center">
         <div class="md-data-table-card-header-title" flex="60" layout="row" layout-align="start center">
-            <span> My Projects</span>
+            <span ng-click="task.navigateToMyProjects()" class="clickable"> My Projects</span>
             <i class="material-icons">chevron_right</i>
-            <span>{{ task.project_name }}</span>
+            <span ng-click="task.navigateToProject()" class="clickable">{{ task.project_name }}</span>
             <i class="material-icons">chevron_right</i>
             <span>{{ task.module_name }}</span>
         </div>
@@ -33,7 +33,7 @@
     </div>
     <div class="table-content">
         <div class="md-data-table-header" layout="row" layout-align="start center">
-            <md-checkbox aria-label="select"></md-checkbox>
+            <md-checkbox ng-checked="task.selectAll" ng-click="task.toggleAll()" aria-label="select"></md-checkbox>
             <div class="md-data-table-header-column" flex="5" layout="row" layout-alignment="start center">
                 Id
             </div>
@@ -59,7 +59,7 @@
                 <div ng-repeat="task_worker in item.task_workers_monitoring">
                     <div class="md-data-table-row" layout="row" layout-align="start center"
                          ng-class="{'md-data-table-last-row': $parent.$last, 'selected': task.isSelected(task_worker)}">
-                        <md-checkbox aria-label="select" ng-click="task.toggle(task_worker)"></md-checkbox>
+                        <md-checkbox ng-checked="task.isSelected(task_worker)" aria-label="select" ng-click="task.toggle(task_worker)"></md-checkbox>
                          <div class="md-data-table-row-cell cell-text" flex="5">{{ item.id }}</div>
                         <div class="md-data-table-row-cell cell-text" flex="30">
                             <div ng-repeat="question_item in item.template_items_monitoring | filter:{role: 'display'}">

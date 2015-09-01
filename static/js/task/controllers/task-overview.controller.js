@@ -17,11 +17,15 @@
         self.tasks = [];
         self.getStatusName = getStatusName;
         self.get_answer = get_answer;
+        self.toggleAll = toggleAll;
         self.toggle = toggle;
         self.isSelected = isSelected;
         self.selectedItems = [];
         self.updateStatus = updateStatus;
         self.downloadResults = downloadResults;
+        self.navigateToMyProjects = navigateToMyProjects;
+        self.navigateToProject = navigateToProject;
+
         self.sort = sort;
         self.config = {
             order_by: "",
@@ -60,6 +64,21 @@
                 return 'rejected';
             }
         }
+
+        function toggleAll() {
+            if(!self.selectedItems.length) {
+                angular.forEach(self.tasks, function(obj) {
+                    angular.forEach(obj.task_workers_monitoring, function(task_worker) {
+                        self.selectedItems.push(task_worker);
+                    });
+                });
+                self.selectAll = true;
+            } else {
+                self.selectedItems = [];
+                self.selectAll = false;
+            }
+        }
+
         function toggle(item) {
             var idx = self.selectedItems.indexOf(item);
             if (idx > -1) self.selectedItems.splice(idx, 1);
@@ -91,6 +110,7 @@
             Task.updateStatus(request_data).then(
                 function success(response) {
                     self.selectedItems = [];
+                    self.selectAll = false;
                     var updated_task_workers = response[0];
                     angular.forEach(updated_task_workers, function(updated_task_worker) {
                         for(var i = 0; i < self.tasks.length; i++) {
@@ -134,6 +154,14 @@
 
                 }
             ).finally(function () {});
+        }
+
+        function navigateToMyProjects() {
+            $location.path('/my-projects');
+        }
+
+        function navigateToProject() {
+            $location.path('/milestones/' + $routeParams.moduleId);
         }
     }
 })();
