@@ -10,12 +10,12 @@
     .module('crowdsource.monitor.controllers')
     .controller('MonitorController', MonitorController);
 
-  MonitorController.$inject = ['$window', '$location', '$scope', '$mdSidenav', '$mdUtil', 'Monitor', '$filter', '$routeParams', '$sce'];
+  MonitorController.$inject = ['$window', '$location', '$scope', '$mdSidenav', '$mdToast', '$mdUtil', 'Monitor', '$filter', '$routeParams', '$sce'];
 
   /**
   * @namespace MonitorController
   */
-  function MonitorController($window, $location, $scope, $mdSidenav,  $mdUtil, Monitor, $filter, $routeParams, $sce) {
+  function MonitorController($window, $location, $scope, $mdSidenav, $mdToast,  $mdUtil, Monitor, $filter, $routeParams, $sce) {
     var vm = $scope;
     vm.projectId = $routeParams.projectId;
     vm.objects = [];
@@ -126,13 +126,14 @@
         result: obj.result
       };
       Monitor.updateResultStatus(twr).then(
-        function success(data, status) {
+        function success(data) {
           var obj_ids = vm.objects.map( function (obj) { return obj.id } )
           var index = obj_ids.indexOf(obj.id)
           vm.objects[index].status = newStatus;
         },
-        function error(data, status) {
+        function error(data) {
           console.log("Update failed!");
+          $mdToast.showSimple('Could not udpate result status.');
         }
       );
     }

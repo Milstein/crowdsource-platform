@@ -13,21 +13,20 @@
   */
   function config($routeProvider) {
     $routeProvider.when('/', {
-      //templateUrl: '/static/templates/intro.html'
       templateUrl: '/static/templates/task-feed/main.html',
       controller: 'TaskFeedController',
       controllerAs: 'taskfeed'
     })
-   
-    .when('/home', {
-      templateUrl: '/static/templates/home.html',
-      controller: 'HomeController'
+    .when('/dashboard', {
+      templateUrl: '/static/templates/dashboard/dashboard.html',
+      controller: 'DashboardController',
+      controllerAs: 'dashboard'
     })
     .when('/messages', {
       templateUrl: '/static/templates/messages/base.html'
     })
     .when('/profile', {
-      templateUrl: '/static/templates/worker/account-basic-info.html',
+      templateUrl : '/static/templates/user/profile.html'
     })
     .when('/userskills', {
       templateUrl: '/static/templates/worker/account-skills.html',
@@ -51,18 +50,19 @@
       controller: 'RequesterProfileController'
     })
     .when('/task/:taskId', {
-      templateUrl: '/static/templates/task/detail.html',
-      controller: 'taskDetailController',
-      controllerAs: 'taskDetail'
+      templateUrl: '/static/templates/task/base.html',
+      controller: 'TaskController',
+      controllerAs: 'task'
+    })
+    .when('/task/:taskId/:taskWorkerId', {
+      templateUrl: '/static/templates/task/base.html',
+      controller: 'TaskController',
+      controllerAs: 'task'
     })
     .when('/task-worker/:taskWorkerId', {
       templateUrl: '/static/templates/task-worker/detail.html',
       controller: 'taskWorkerDetailController',
       controllerAs: 'taskWorkerDetail'
-    })
-    .when('/monitor/:projectId', {
-      templateUrl: '/static/templates/task/monitor.html',
-      controller: 'MonitorController'
     })
     .when('/register', {
       controller: 'RegisterController',
@@ -75,7 +75,26 @@
       controllerAs: 'login',
       templateUrl: '/static/templates/authentication/login.html'
     })
-
+    .when('/change-password', {
+      controller: 'AuthSettingsController',
+      controllerAs: 'auth',
+      templateUrl: '/static/templates/authentication/change-password.html'
+    })
+    .when('/account-activation/:activation_key', {
+      controller: 'AuthSettingsController',
+      controllerAs: 'auth',
+      templateUrl: '/static/templates/authentication/activate-account.html'
+    })
+    .when('/forgot-password', {
+      controller: 'AuthSettingsController',
+      controllerAs: 'auth',
+      templateUrl: '/static/templates/authentication/forgot-password.html'
+    })
+    .when('/reset-password/:reset_key/:enable', {
+      controller: 'AuthSettingsController',
+      controllerAs: 'auth',
+      templateUrl: '/static/templates/authentication/reset-password.html'
+    })
     .when('/terms', {
       templateUrl: '/static/templates/terms.html'
     })
@@ -95,21 +114,15 @@
         templateUrl :'/static/templates/project/payment.html'
     })
     
-    .when('/milestones', {
-        controller: 'ProjectController',
-        controllerAs: 'project',
-        templateUrl :'/static/templates/project/milestones.html'
+    .when('/milestones/:projectId', {
+        controller: 'MilestoneOverviewController',
+        controllerAs: 'milestone',
+        templateUrl :'/static/templates/project/milestone/overview.html'
     })
-
-    .when('/milestones/createtemplate', {
-        controller: 'CreateTemplateController',
-        controllerAs: 'vm',
-        templateUrl :'/static/templates/project/milestones/createtemplate.html'
-    })
-
-    .when('/milestones/:id/viewtemplate', {
-        templateUrl: '/static/templates/project/milestones/viewtemplate.html',
-        controller: 'ViewTemplateCtrl'
+    .when('/milestone-tasks/:moduleId', {
+        controller: 'TaskOverviewController',
+        controllerAs: 'task',
+        templateUrl :'/static/templates/task/overview.html'
     })
     
     .when('/review', {
@@ -118,10 +131,10 @@
         templateUrl :'/static/templates/project/summary.html'
     })
     
-    .when('/create-project/:projectStepId', {
+    .when('/create-project/:stepId', {
         controller: 'ProjectController',
         controllerAs: 'project',
-        templateUrl :'/static/templates/project/base.html'
+        templateUrl :'/static/templates/project/base-create.html'
     })
 
     .when('/task-feed', {
@@ -135,9 +148,14 @@
         templateUrl :'/static/templates/template/container.html'
     })
     .when('/my-projects', {
-            controller: 'ProjectController',
+            controller: 'MyProjectController',
             controllerAs: 'project',
             templateUrl :'/static/templates/project/my-projects.html'
+    })
+    .when('/add-milestone/:projectId/:stepId', {
+      controller: 'ProjectController',
+      controllerAs: 'project',
+      templateUrl: '/static/templates/project/base-add.html'
     })
     .when('/api/google-auth-finish?:code', {
         controller: 'DriveController',
@@ -167,7 +185,7 @@
       templateUrl: '/static/templates/contributors/anirudh.html'
     })
 
-  	.when('/contributors/shirish', {
+    .when('/contributors/shirish', {
       templateUrl: '/static/templates/contributors/shirish.html'
     })
 
@@ -228,7 +246,7 @@
     })
 
     .when('/contributors/AmitRakesh', {
-		templateUrl: '/static/templates/contributors/amitrakesh.html'
+    templateUrl: '/static/templates/contributors/amitrakesh.html'
     })
 
     .when('/contributors/Milstein', {
@@ -247,7 +265,7 @@
       templateUrl: '/static/templates/contributors/damon.html'
     })
 
-	.when('/contributors/rcompton', {
+  .when('/contributors/rcompton', {
       templateUrl: '/static/templates/contributors/rcompton.html'
     })
 
@@ -263,11 +281,11 @@
       templateUrl: '/static/templates/contributors/abhinav.html'
     })
 
-	.when('/contributors/Pabitra', {
+  .when('/contributors/Pabitra', {
       templateUrl: '/static/templates/contributors/Pabitra.html'
     })
 
-  	.when('/contributors/KajalGupta', {
+    .when('/contributors/KajalGupta', {
       templateUrl: '/static/templates/contributors/kajal.html'
     })
 
@@ -328,9 +346,9 @@
      })
 
     .when('/contributors/riyakothari', {
-	  templateUrl: '/static/templates/contributors/riyakothari.html'
+    templateUrl: '/static/templates/contributors/riyakothari.html'
      })
-	.when('/contributors/balaca', {
+  .when('/contributors/balaca', {
     templateUrl: '/static/templates/contributors/balaca.html'
      })
     .when('/contributors/jeerel', {
