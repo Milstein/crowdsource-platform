@@ -7,6 +7,7 @@ from crowdsourcing.models import RequesterInputFile, Task
 from crowdsourcing.utils import get_delimiter
 import pandas as pd
 import StringIO
+from crowdsourcing.experimental_models import SubModule
 
 
 class CSVManagerViewSet(ViewSet):
@@ -22,17 +23,26 @@ class CSVManagerViewSet(ViewSet):
         serializer = RequesterInputFileSerializer(data=request.data)
         if serializer.is_valid():
             id = serializer.create()
-            metadata = {'id': id, 'num_rows': num_rows, 'column_headers': column_headers}
+            first_row = dict(zip(column_headers, list(df.values[0])))
+            metadata = {'id': id, 'num_rows': num_rows, 'column_headers': column_headers, 'first': first_row}
             return Response({'metadata': metadata})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def download_results(self, request, *args, **kwargs):
-        module_id = request.query_params.get('module_id')
-        task = Task.objects.filter(module=module_id)
-        task_serializer = TaskSerializer(task, many=True, fields=('data', 'task_workers'))
+        if request.query_params.get('fake_module_id', False):
+            submodule = SubModule.objects.get(fake_module_id=request.query_params.get('fake_module_id'))
+            tasks = Task.objects.filter(module=submodule.origin_module.id)
+            task_serializer = TaskSerializer(instance=tasks, many=True, context={'submodule': submodule.id},
+                                             fields=('data', 'task_workers_for_download', 'comments'))
+            for task in task_serializer.data:
+                task['task_workers'] = task['task_workers_for_download']
+        else:
+            module_id = request.query_params.get('module_id')
+            task = Task.objects.filter(module=module_id)
+            task_serializer = TaskSerializer(task, many=True, fields=('data', 'task_workers', 'comments'))
         tasks = task_serializer.data
-        column_headers = ['task_status', 'worker_alias', 'created', 'last_updated']
+        column_headers = ['task_status', 'worker_alias', 'created', 'last_updated', 'feedback']
         data_keys = eval(tasks[0]['data']).keys()
         for key in data_keys:
             column_headers.append(key)
@@ -47,11 +57,12 @@ class CSVManagerViewSet(ViewSet):
                     results.append(task_worker_result['result'])
                 item = {'id': task_worker['id'], 'data': task['data'], 'worker_alias': task_worker['worker_alias'],
                         'task_status': task_worker['task_status'], 'results': results,
-                        'created': task_worker['created_timestamp'], 'last_updated': task_worker['last_updated']}
+                        'created': task_worker['created_timestamp'], 'last_updated': task_worker['last_updated'],
+                        'feedback': ', '.join(map(lambda x: x['comment'].get('body',''), [comment for comment in task['comments']])) }
                 items.append(item)
         max_results = 0
         for item in items:
-            temp = [item['task_status'], item['worker_alias'], item['created'], item['last_updated']]
+            temp = [item['task_status'], item['worker_alias'], item['created'], item['last_updated'], item['feedback']]
             for key in data_keys:
                 temp.append(eval(item['data'])[key])
             num_results = 0
@@ -64,5 +75,7 @@ class CSVManagerViewSet(ViewSet):
             column_headers.append('Output_' + str(i))
         df = pd.DataFrame(data)
         output = StringIO.StringIO()
-        df.to_csv(output, header=column_headers, index=False)
-        return Response(output.getvalue(), status.HTTP_200_OK)
+        df.to_csv(output, header=column_headers, index=False, encoding="utf-8")
+        data = output.getvalue()
+        output.close()
+        return Response(data, status.HTTP_200_OK)

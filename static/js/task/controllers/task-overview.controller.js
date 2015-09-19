@@ -6,13 +6,13 @@
         .controller('TaskOverviewController', TaskOverviewController);
 
     TaskOverviewController.$inject = ['$window', '$location', '$scope', '$mdToast', 'Task',
-        '$filter', '$routeParams', 'Authentication'];
+        '$filter', '$routeParams', 'Authentication', 'RankingService', '$rootScope'];
 
     /**
      * @namespace TaskOverviewController
      */
     function TaskOverviewController($window, $location, $scope, $mdToast, Task,
-                               $filter, $routeParams, Authentication) {
+                               $filter, $routeParams, Authentication, RankingService, $rootScope) {
         var self = this;
         self.tasks = [];
         self.getStatusName = getStatusName;
@@ -25,6 +25,7 @@
         self.downloadResults = downloadResults;
         self.navigateToMyProjects = navigateToMyProjects;
         self.navigateToProject = navigateToProject;
+        self.handleRatingSubmit = handleRatingSubmit;
 
         self.sort = sort;
         self.config = {
@@ -33,9 +34,17 @@
         };
 
         activate();
+
         function activate(){
             var module_id = $routeParams.moduleId;
-            Task.getTasks(module_id).then(
+            getTasks(module_id);
+            getWorkerData(module_id);
+        }
+
+        function getTasks(module_id){
+            var sample_tasks = $rootScope.account.requester_experiment_fields.pool == 3 ||
+                                 $rootScope.account.requester_experiment_fields.pool == 4;
+            Task.getTasks(module_id, sample_tasks).then(
                 function success(response) {
                     self.tasks = response[0].tasks;
                     self.project_name = response[0].project_name;
@@ -49,19 +58,19 @@
 
         function getStatusName (status) {
             if(status == 1) {
-                return 'created';
+                return 'In Progress';
             }
             else if(status == 2){
-                return 'in progress';
+                return 'Submitted';
             }
             else if(status == 3){
-                return 'accepted';
-            }
-            else if(status == 5){
-                return 'returned';
+                return 'Accepted';
             }
             else if(status == 4){
-                return 'rejected';
+                return 'Rejected';
+            }
+            else if(status == 5){
+                return 'Returned';
             }
         }
 
@@ -81,8 +90,12 @@
 
         function toggle(item) {
             var idx = self.selectedItems.indexOf(item);
-            if (idx > -1) self.selectedItems.splice(idx, 1);
-            else self.selectedItems.push(item);
+            if (idx > -1) {
+                self.selectedItems.splice(idx, 1);
+            }
+            else {
+                self.selectedItems.push(item);
+            }
         }
         function isSelected(item){
             return !(self.selectedItems.indexOf(item) < 0);
@@ -138,9 +151,16 @@
         }
 
         function downloadResults() {
-            var params = {
-                module_id: $routeParams.moduleId
-            };
+            if($rootScope.account.requester_experiment_fields.pool == 3 ||
+                 $rootScope.account.requester_experiment_fields.pool == 4) {
+                var params = {
+                    fake_module_id: $routeParams.moduleId
+                };
+            } else {
+                var params = {
+                    module_id: $routeParams.moduleId
+                };
+            }
             Task.downloadResults(params).then(
                 function success(response) {
                     var a  = document.createElement('a');
@@ -162,6 +182,83 @@
 
         function navigateToProject() {
             $location.path('/milestones/' + $routeParams.moduleId);
+        }
+
+        function getWorkerData(module_id) {
+            self.workerRankings = [];
+            self.loadingRankings = true;
+            var fake = $rootScope.account.requester_experiment_fields.pool == 3 ||
+                        $rootScope.account.requester_experiment_fields.pool == 4;
+            RankingService.getWorkerRankingsByModule(module_id, fake).then(
+                function success(resp) {
+                    var data = resp[0];
+                    if(fake) {
+                        data = data.map(function (item) {
+                            var alias = item.alias;
+                            var id = item.id;
+                            var module = item.module;
+                            var origin_type = item.origin_type;
+                            var target = item.target;
+                            var task_count = item.task_count;
+
+                            item = {};
+                            item.alias = alias;
+                            item.id = id;
+                            item.module = module;
+                            item.origin_type = origin_type;
+                            item.reviewType = 'requester';
+                            item.target = target;
+                            item.task_count = task_count;
+
+                            return item;
+
+                        });
+                    } else {
+                        data = data.map(function (item) {
+                            item.reviewType = 'requester';
+
+                            if(item.hasOwnProperty('id') && item.id){
+                                item.current_rating_id=item.id;
+                            }
+
+                            if(item.hasOwnProperty('weight') && item.weight){
+                                item.current_rating=item.weight;
+                            }
+
+                            return item;
+                        });
+                    }
+                    self.workerRankings = data;
+
+                },
+                function error(resp) {
+                    var data = resp[0];
+                    $mdToast.showSimple('Could not get worker rankings.');
+                }).finally(function(){
+                    self.loadingRankings = false;
+                });
+        }
+
+        function handleRatingSubmit(rating, entry) {
+            if (entry.hasOwnProperty('current_rating_id') && entry.current_rating_id) {
+                RankingService.updateRating(rating, entry).then(function success(resp) {
+                    entry.current_rating = rating;
+                }, function error(resp) {
+                    $mdToast.showSimple('Could not update rating.');
+                }).finally(function () {
+
+                });
+            } else {
+                RankingService.submitRating(rating, entry).then(function success(resp) {
+                    entry.current_rating_id = resp[0].id;
+                    entry.current_rating = rating;
+                }, function error(resp) {
+                    $mdToast.showSimple('Could not submit rating.')
+                }).finally(function () {
+
+                });
+            }
+
         }
     }
 })();
