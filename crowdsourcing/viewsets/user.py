@@ -4,11 +4,13 @@ from crowdsourcing.models import *
 from rest_framework.decorators import detail_route, list_route
 from crowdsourcing.serializers.user import UserProfileSerializer, UserSerializer, UserPreferencesSerializer
 from django.contrib.auth.models import User
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import mixins
+from crowdsourcing.permissions.user import CanCreateAccount
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from crowdsourcing.utils import get_model_or_none
+
 
 class UserViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
@@ -18,6 +20,7 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, viewsets.G
     queryset = User.objects.all()
     lookup_value_regex = '[^/]+'
     lookup_field = 'username'
+    permission_classes = [CanCreateAccount]
 
     def create(self, request, *args, **kwargs):
         serializer = UserSerializer(validate_non_fields=True, data=request.data, context={'request': request})
@@ -25,6 +28,10 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, viewsets.G
             serializer.create()
             return Response(serializer.data)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    @list_route(methods=['post'], permission_classes=[IsAdminUser, ])
+    def hard_create(self, request):
+        return self.create(request)
 
     @detail_route(methods=['post'], permission_classes=[IsAuthenticated, ])
     def change_password(self, request, username=None):
@@ -72,7 +79,7 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.CreateModelMixin, viewsets.G
                 activate_user.delete()
                 return Response(data={"message": "Account activated successfully"}, status=status.HTTP_200_OK)
         except RegistrationModel.DoesNotExist:
-            return Response(data={"message": "Invalid activation key"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"message": "Your account couldn't be activated. It may already be active."}, status=status.HTTP_400_BAD_REQUEST)
 
     @list_route(methods=['post'])
     def forgot_password(self, request):

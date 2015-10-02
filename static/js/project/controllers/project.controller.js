@@ -18,7 +18,6 @@
       self.addMilestone = addMilestone;
       self.name = null;
       self.description = null;
-      self.getReferenceData = getReferenceData;
       self.categories = [];
       self.getSelectedCategories = getSelectedCategories;
       self.getStepId = getStepId;
@@ -27,6 +26,7 @@
       self.getStepMilestone = getStepMilestone;
       self.getPrevious = getPrevious;
       self.getLastMilestone = getLastMilestone;
+      self.getLastMilestoneComments = getLastMilestoneComments;
       self.getNext = getNext;
       self.upload = upload;
       self.initMicroFlag = initMicroFlag;
@@ -35,7 +35,11 @@
       self.currentProject.payment = self.currentProject.payment || {};
 
       self.querySearch = function(query) {
-        return helpersService.querySearch(self.currentProject.metadata.column_headers, query, false);
+        if(self.currentProject && self.currentProject.hasOwnProperty('metadata') && self.currentProject.metadata.hasOwnProperty('column_headers') && self.currentProject.metadata.column_headers) {
+            return helpersService.querySearch(self.currentProject.metadata.column_headers, query, false);
+        }else{
+            return [];
+        }
       };
 
       self.other = false;
@@ -50,14 +54,31 @@
       }
       initMicroFlag();
 
+      function getLastMilestoneComments() {
+        Project.getLastMilestone(getProjectId()).then(
+          function success(resp) {
+            var data = resp[0];
+            self.currentProject.hasComments = data.hasOwnProperty('comments') && data.comments.length > 0;
+            self.currentProject.comments = data.comments;
+          },
+          function error(resp) {
+            var data = resp[0];
+            self.error = data.detail;
+          }
+        ).finally(function () {})
+      }
+
       function getLastMilestone() {
         Project.getLastMilestone(getProjectId()).then(
           function success(resp) {
             var data = resp[0];
             self.currentProject.taskDescription = data.description;
+            self.currentProject.hasComments = data.hasOwnProperty('comments') && data.comments.length > 0;
+            self.currentProject.comments = data.comments;
             self.currentProject.template = {
               name: data.template[0].name,
               items: data.template[0].template_items
+
             };
             self.currentProject.payment = {
               number_of_hits: data.repetition,
@@ -75,11 +96,6 @@
 
       self.getPath = function(){
           return $location.path();
-      };
-      self.toggle = function (item) {
-        self.currentProject.categories = [item.id];
-        if (item == self.otherIndex) self.other = true;
-        else self.other = false;
       };
 
       self.exists = function (item) {
@@ -103,11 +119,6 @@
           ).finally(function () {});
         }
       }
-      function getReferenceData() {
-        Project.getReferenceData().success(function(data) {
-          $scope.referenceData = data[0];
-        });
-      }
       /**
        * @name addProject
        * @desc Create new project
@@ -120,9 +131,22 @@
           return;
         }
 
+        self.currentProject.categories = [self.currentProject.category];
+
+        var items = self.currentProject.template.items.map(function(item,index){
+            item.position = index;
+            return item;
+        });
+
+        self.currentProject.template.items = items;
+
         Project.addProject(self.currentProject).then(
           function success(resp) {
               Project.clean();
+              
+              self.currentProject = Project.retrieve();
+              self.currentProject.payment = self.currentProject.payment || {};
+
               $location.path('/monitor');
           },
           function error(resp) {
@@ -135,9 +159,28 @@
       }
 
       function addMilestone() {
+
+        if (!self.currentProject.template || !self.currentProject.template.name) {
+          $mdToast.showSimple('You haven\'t created a template.');
+          return;
+        }
+
+        self.currentProject.categories = [self.currentProject.category];
+
+        var items = self.currentProject.template.items.map(function(item,index){
+            item.position = index;
+            return item;
+        });
+
+        self.currentProject.template.items = items;
+
         Project.addMilestone(self.currentProject, getProjectId()).then(
           function success(resp) {
             Project.clean();
+
+            self.currentProject = Project.retrieve();
+            self.currentProject.payment = self.currentProject.payment || {};
+
             $location.path('/monitor');
           },
           function error(resp) {

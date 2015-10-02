@@ -32,7 +32,8 @@
       updateStatus: updateStatus,
       downloadResults: downloadResults,
       getTaskComments: getTaskComments,
-      saveComment: saveComment
+      saveComment: saveComment,
+      getCountOfRankedTasks: getCountOfRankedTasks
     };
 
     return Task;
@@ -99,14 +100,24 @@
       return HttpService.doRequest(settings);
     }
 
-    function getTasks(module_id) {
-      var settings = {
-        url: '/api/task/list_by_module/',
-        method: 'GET',
-        params: {
-            module_id: module_id
-        }
-      };
+    function getTasks(module_id, sample_tasks) {
+      if(sample_tasks) {
+        var settings = {
+          url: '/api/task/sample_by_submodule/',
+          method: 'GET',
+          params: {
+            fake_module_id: module_id
+          }
+        };
+      } else {
+        var settings = {
+          url: '/api/task/list_by_module/',
+          method: 'GET',
+          params: {
+              module_id: module_id
+          }
+        };
+      }
       return HttpService.doRequest(settings);
     }
 
@@ -143,6 +154,13 @@
                 body: comment
             }
         }
+      };
+      return HttpService.doRequest(settings);
+    }
+    function getCountOfRankedTasks() {
+      var settings = {
+        url: '/api/get-rating-count/',
+        method: 'GET'
       };
       return HttpService.doRequest(settings);
     }
