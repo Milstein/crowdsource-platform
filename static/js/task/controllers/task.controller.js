@@ -6,9 +6,9 @@
         .controller('TaskController', TaskController);
 
     TaskController.$inject = ['$scope', '$location', '$mdToast', '$log', '$http', '$routeParams',
-        'Task', 'Authentication', 'Template', '$sce', '$filter', 'Dashboard', '$rootScope', 'RankingService'];
+        'Task', 'Authentication', 'Template', '$sce', '$filter', 'Dashboard', '$rootScope', 'RankingService', '$cookies'];
 
-    function TaskController($scope, $location, $mdToast, $log, $http, $routeParams, Task, Authentication, Template, $sce, $filter, Dashboard, $rootScope, RankingService) {
+    function TaskController($scope, $location, $mdToast, $log, $http, $routeParams, Task, Authentication, Template, $sce, $filter, Dashboard, $rootScope, RankingService, $cookies) {
         var self = this;
         self.taskData = null;
         self.buildHtml = buildHtml;
@@ -18,9 +18,8 @@
 
         activate();
 
-        self.isPrototype = $rootScope.account.worker_experiment_fields.has_prototype;
-
         function activate() {
+
             self.task_worker_id = $routeParams.taskWorkerId;
             self.task_id = $routeParams.taskId;
 
@@ -39,15 +38,13 @@
 
             var id = self.task_id;
 
-            if (self.isSavedQueue || self.isSavedReturnedQueue){
+            if (self.isSavedQueue || self.isSavedReturnedQueue) {
                 id = self.task_worker_id;
             }
 
             Task.getTaskWithData(id, self.isSavedQueue || self.isSavedReturnedQueue).then(function success(data) {
-                    
 
-                    self.showRating = $rootScope.account.worker_experiment_fields.pool == 2;
-                    if(data[0].hasOwnProperty('rating')){
+                    if (data[0].hasOwnProperty('rating')) {
                         self.rating = data[0].rating[0];
                         self.rating.current_rating = self.rating.weight;
                         self.rating.current_rating_id = self.rating.id;
@@ -58,7 +55,7 @@
                     self.rating.module = data[0].module;
                     self.rating.target = data[0].target;
 
-                    
+
                     self.taskData = data[0].data;
                     self.taskData.id = self.taskData.task ? self.taskData.task : id;
                     if (self.taskData.has_comments) {
@@ -116,21 +113,6 @@
         }
 
         function submitOrSave(task_status) {
-            var commentExists=false;
-            if(self.taskData.comments){
-                angular.forEach(self.taskData.comments, function(obj){
-                    if(obj.comment.sender == $rootScope.account.profile.id){
-                        commentExists = true;
-                    }
-                });
-            }
-            if(!commentExists && $rootScope.account.worker_experiment_fields.has_prototype
-                && $rootScope.account.worker_experiment_fields.feedback_required){
-                    $mdToast.showSimple('Please add feedback and try again ..');
-                    return;
-            }
-
-
             var itemsToSubmit = $filter('filter')(self.taskData.task_template.template_items, {role: 'input'});
             var itemAnswers = [];
             angular.forEach(itemsToSubmit, function (obj) {
@@ -207,7 +189,7 @@
             }
         }
 
-        self.handleRatingSubmit = function(rating, entry) {
+        self.handleRatingSubmit = function (rating, entry) {
             if (entry.hasOwnProperty('current_rating_id')) {
                 RankingService.updateRating(rating, entry).then(function success(resp) {
                     entry.current_rating = rating;
@@ -219,7 +201,7 @@
             } else {
                 entry.reviewType = 'worker';
                 RankingService.submitRating(rating, entry).then(function success(resp) {
-                    entry.current_rating_id = resp[0].id
+                    entry.current_rating_id = resp[0].id;
                     entry.current_rating = rating;
                 }, function error(resp) {
                     $mdToast.showSimple('Could not submit rating.')

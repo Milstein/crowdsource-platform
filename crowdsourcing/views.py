@@ -32,7 +32,6 @@ class Logout(APIView):
         logout(request)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-
 class Login(APIView):
     method_decorator(csrf_protect)
 
@@ -67,49 +66,6 @@ class Login(APIView):
                 response_data["is_requester"] = hasattr(request.user.userprofile, 'requester')
                 response_data["is_worker"] = hasattr(request.user.userprofile, 'worker')
 
-                '''
-                    For experimental phase only, to be removed later.
-                    {begin experiment}
-                '''
-                if hasattr(request.user.userprofile, 'requester'):
-                    experiment_model = get_model_or_none(experimental_models.RequesterExperiment,
-                                                         requester=request.user.userprofile.requester)
-                    if experiment_model:
-                        response_data['requester_experiment_fields'] = {
-                            "has_prototype": experiment_model.has_prototype,
-                            "has_boomerang": experiment_model.has_boomerang,
-                            "pool": experiment_model.pool
-                        }
-                    else:
-                        response_data['requester_experiment_fields'] = {
-                            "has_prototype": True,
-                            "has_boomerang": True,
-                            "pool": -1
-                        }
-                if hasattr(request.user.userprofile, 'worker'):
-                    experiment_model = get_model_or_none(experimental_models.WorkerExperiment,
-                                                         worker=request.user.userprofile.worker)
-
-                    if experiment_model:
-                        response_data['worker_experiment_fields'] = {
-                            "has_prototype": experiment_model.has_prototype,
-                            "sorting_type": experiment_model.sorting_type,
-                            "pool": experiment_model.pool,
-                            "is_subject_to_cascade": experiment_model.is_subject_to_cascade,
-                            "feedback_required": experiment_model.feedback_required
-                        }
-                    else:
-                        response_data['worker_experiment_fields'] = {
-                            "has_prototype": True,
-                            "sorting_type": 1,
-                            "is_subject_to_cascade": True,
-                            "pool": -1,
-                            "feedback_required": False
-                        }
-                '''
-                    {end experiment}
-                '''
-
                 return Response(response_data, status.HTTP_200_OK)
             else:
                 raise AuthenticationFailed(_('Account is not activated yet.'))
@@ -132,3 +88,4 @@ def registration_successful(request):
 
 def home(request):
     return render(request, 'base/index.html')
+
