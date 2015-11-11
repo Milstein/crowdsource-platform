@@ -96,6 +96,8 @@ class UserProfile(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     last_updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 
+    last_active = models.DateTimeField(auto_now_add=False, auto_now=False, null=True)
+
 
 class UserCountry(models.Model):
     country = models.ForeignKey(Country)
@@ -527,6 +529,12 @@ class WorkerRequesterRating(models.Model):
     origin_type = models.CharField(max_length=16)
     created_timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     last_updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    class Meta:
+        index_together = [
+            ['origin', 'target'],
+            ['origin', 'target', 'last_updated', 'origin_type']
+        ]
 
 
 class Comment(models.Model):
